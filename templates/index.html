@@ -1,0 +1,101 @@
+{%extends "base.html"%}{% block title%}Home Page{% endblock %}
+{% block content %}
+
+<div class="container">
+    <br />
+    <section class="section">
+        <div class="row">
+            <!-- Conversion form -->
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Currency Converter</h5>
+                        <form method="POST">
+                            <!-- dropdowns -->
+                            <div class="row mb-4">
+                                <label for="textBase" class="col-sm-3 col-form-label">Base Currency</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="baseCurrency" id="baseCurrency">
+                                        {% for pair in pairs%}
+                                            <option value="{{pair.code}}">{{pair.code}} - {{pair.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="textTo" class="col-sm-3 col-form-label">For Currency</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" name="toCurrency" id="toCurrency">
+                                        {% for pair in pairs%}
+                                            <option value="{{pair.code}}">{{pair.code}} - {{pair.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="textAmount" class="col-sm-3 col-form-label">Amount to convert</label>
+                                <div class="col-sm-9">
+                                    <input type="amount" class="form-control" id="amount" name="amount" placeholder="Amount to be converted"/>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
+                                Convert!
+                                </button>
+                            </div>
+                        </form>
+                        {% if conversion %}
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" text-align = "center"></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" text-align = "center"> {{conversion.base_currency_code}} -> {{for_currency}} - Conversion rate: {{conversion["rates"][for_currency]["rate"]}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>{{conversion.base_currency_code}} - {{conversion.base_currency_name}}</th>
+                                    <th>{{for_currency}} - {{conversion["rates"][for_currency]["currency_name"]}}</th>
+                                </tr>
+                                <tr>
+                                    <td>{{conversion.amount}}</td>
+                                    <td>{{conversion["rates"][for_currency]["rate_for_amount"]}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Main Conversions Table -->
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">Rates converted from EUR (Euro)</h5>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Pair</th>
+                                    <th>Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pair in conversions: %}
+                                <tr>
+                                    <th>{{ pair.to_currency }}</th>
+                                    <td>{{ pair.rate }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}
